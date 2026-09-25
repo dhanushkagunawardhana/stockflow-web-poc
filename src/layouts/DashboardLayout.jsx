@@ -4,10 +4,10 @@ import { Sidebar, TopNav } from "@/components/compositions";
 
 function DashboardLayout({ children }) {
   return (
-    <div className="min-h-screen bg-muted/30 flex flex-row">
+    <div className="flex min-h-screen flex-row bg-muted/30">
       <Sidebar />
 
-      <div className="w-full">
+      <div className="min-w-0 flex-1">
         <TopNav />
 
         <main className="p-6">{children}</main>
