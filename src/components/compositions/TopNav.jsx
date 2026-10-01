@@ -1,5 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { routes } from "@/data/routes";
 
 import { Button } from "../ui/button";
 import {
@@ -11,8 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { House } from "lucide-react";
 
 const warehouseList = [
   { label: "All Warehouses", value: "all" },
@@ -28,11 +28,13 @@ const monthList = [
 ];
 
 function TopNav() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const pageTitle = routes.find(({ route }) => route === pathname)?.title;
 
   return (
     <header className="sticky top-0 z-40 flex h-16 w-full items-center gap-2 border-b bg-background px-6">
-      <h1 className="font-semibold text-foreground">Page Title</h1>
+      <h1 className="font-semibold text-foreground">{pageTitle}</h1>
 
       <div className="flex items-center gap-3 ml-auto">
         <Select items={warehouseList} defaultValue={"all"}>

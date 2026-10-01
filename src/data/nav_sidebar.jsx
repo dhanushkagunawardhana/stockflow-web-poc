@@ -9,20 +9,24 @@ export const sidebarNavigation = [
   {
     label: "Stock Summary",
     icon: BarChart3,
-    isActive: true,
+    to: "/stock-summary",
+    activePaths: ["/", "/stock-summary"],
   },
   {
     label: "Stock Requests",
     icon: ClipboardList,
+    to: "/stock-requests",
     badge: 3,
   },
   {
     label: "Distribution Runs",
     icon: PackageCheck,
+    to: "/distribution-runs",
   },
   {
     label: "Return Approvals",
     icon: RotateCcw,
+    to: "/return-approvals",
     badge: 2,
   },
 ];

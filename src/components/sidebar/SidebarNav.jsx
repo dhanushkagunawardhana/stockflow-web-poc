@@ -1,10 +1,15 @@
+import { NavLink, useLocation } from "react-router-dom";
+
 function SidebarNavItem({ item }) {
-  const { badge, icon: Icon, isActive, label } = item;
+  const { pathname } = useLocation();
+  const { activePaths = [item.to], badge, icon: Icon, label, to } = item;
+  const isActive = activePaths.includes(pathname);
 
   return (
     <li>
-      <button
-        type="button"
+      <NavLink
+        to={to}
+        end
         aria-current={isActive ? "page" : undefined}
         className={`flex h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors ${
           isActive
@@ -19,7 +24,7 @@ function SidebarNavItem({ item }) {
             {badge}
           </span>
         ) : null}
-      </button>
+      </NavLink>
     </li>
   );
 }
