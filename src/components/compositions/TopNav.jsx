@@ -1,6 +1,6 @@
-import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { monthOptions, warehouseOptions } from "@/data/mock/stock-summary";
 import { routes } from "@/data/routes";
 
 import { Button } from "../ui/button";
@@ -14,19 +14,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const warehouseList = [
-  { label: "All Warehouses", value: "all" },
-  { label: "Colombo Central Warehouse", value: "colombo" },
-  { label: "Kandy Warehouse", value: "kandy" },
-  { label: "Galle Warehouse", value: "galle" },
-];
-
-const monthList = [
-  { label: "August 2026", value: "2026-08" },
-  { label: "July 2026", value: "2026-09" },
-  { label: "June 2026", value: "2026-10" },
-];
-
 function TopNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -37,14 +24,14 @@ function TopNav() {
       <h1 className="font-semibold text-foreground">{pageTitle}</h1>
 
       <div className="flex items-center gap-3 ml-auto">
-        <Select items={warehouseList} defaultValue={"all"}>
+        <Select items={warehouseOptions} defaultValue={"all"}>
           <SelectTrigger className="w-full min-w-60">
             <SelectValue placeholder="Select a Warehouse" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Warehouses</SelectLabel>
-              {warehouseList.map((item) => (
+              {warehouseOptions.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
                 </SelectItem>
@@ -53,14 +40,14 @@ function TopNav() {
           </SelectContent>
         </Select>
 
-        <Select items={monthList} defaultValue={"2026-08"}>
+        <Select items={monthOptions} defaultValue={"2026-08"}>
           <SelectTrigger className="w-full min-w-40">
             <SelectValue placeholder="Select a Month" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Months</SelectLabel>
-              {monthList.map((item) => (
+              {monthOptions.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
                 </SelectItem>
