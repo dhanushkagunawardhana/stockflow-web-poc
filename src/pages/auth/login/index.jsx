@@ -136,6 +136,16 @@ function Login() {
                 Sign in
               </Button>
             </form>
+
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              New to StockFlow?{" "}
+              <NavLink
+                to="/sign-up"
+                className="font-medium text-orange-600 hover:underline"
+              >
+                Sign up
+              </NavLink>
+            </p>
           </CardContent>
         </Card>
       </div>

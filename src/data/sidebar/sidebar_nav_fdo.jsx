@@ -9,6 +9,7 @@ export const sidebarNavFDO = [
     label: "Stock Requests",
     icon: ClipboardList,
     to: "/fdo/stock-requests",
+    activePaths: ["/fdo", "/fdo/stock-requests"],
   },
   {
     label: "Distributions",

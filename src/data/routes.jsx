@@ -2,6 +2,7 @@ import {
   DistributionRuns,
   Login,
   ReturnApprovals,
+  SignUp,
   StockRequests,
   StockSummary,
 } from "@/pages";
@@ -9,15 +10,23 @@ import {
 import * as Pages from "@/pages";
 
 export const routes = [
-  {
-    title: "Stock Summary",
-    route: "/",
-    page: <StockSummary />,
-  },
+  // Auth
   {
     title: "Login",
     route: "/login",
     page: <Login />,
+  },
+  {
+    title: "Sign up",
+    route: "/sign-up",
+    page: <SignUp />,
+  },
+
+  // Stock Manager
+  {
+    title: "Stock Summary",
+    route: "/",
+    page: <StockSummary />,
   },
   {
     title: "Stock Summary",
@@ -39,7 +48,18 @@ export const routes = [
     route: "/return-approvals",
     page: <ReturnApprovals />,
   },
+
   // FDO
+  {
+    title: "Stock Requests",
+    route: "/fdo",
+    page: <Pages.FDOStockRequests />,
+  },
+  {
+    title: "Stock Requests",
+    route: "/fdo/stock-requests",
+    page: <Pages.FDOStockRequests />,
+  },
   {
     title: "Distributions",
     route: "/fdo/distributions",
@@ -49,10 +69,5 @@ export const routes = [
     title: "Run History",
     route: "/fdo/history",
     page: <Pages.FDORunHistory />,
-  },
-  {
-    title: "Stock Requests",
-    route: "/fdo/stock-requests",
-    page: <Pages.FDOStockRequests />,
   },
 ];
