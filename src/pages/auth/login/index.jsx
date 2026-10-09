@@ -15,11 +15,19 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInWithPassword } from "@/lib/auth";
+
+const landingPageByRole = {
+  "stock-manager": "/stock-summary",
+  "fdo": "/fdo/stock-requests",
+};
 
 function Login() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -32,16 +40,29 @@ function Login() {
       ...currentForm,
       [name]: value,
     }));
+    setError("");
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setError("");
+    setIsSubmitting(true);
 
-    console.log("Login form:", form);
+    try {
+      const user = await signInWithPassword(form);
+      const destination = user && landingPageByRole[user.role];
 
-    // Replace this with your API login request.
-    // If login succeeds:
-    navigate("/");
+      if (!destination) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      navigate(destination, { replace: true });
+    } catch {
+      setError("Unable to sign in. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -118,6 +139,7 @@ function Login() {
                     variant="ghost"
                     size="icon-sm"
                     className="absolute right-1 top-1/2 -translate-y-1/2"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                     onClick={() => setShowPassword((current) => !current)}
                   >
                     {showPassword ? (
@@ -129,11 +151,18 @@ function Login() {
                 </div>
               </div>
 
+              {error ? (
+                <p role="alert" className="text-sm text-destructive">
+                  {error}
+                </p>
+              ) : null}
+
               <Button
                 type="submit"
                 className="w-full bg-orange-500 hover:bg-orange-600"
+                disabled={isSubmitting}
               >
-                Sign in
+                {isSubmitting ? "Signing in..." : "Sign in"}
               </Button>
             </form>
 
