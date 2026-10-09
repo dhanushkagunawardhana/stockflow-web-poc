@@ -6,6 +6,8 @@ import {
   StockSummary,
 } from "@/pages";
 
+import * as Pages from "@/pages";
+
 export const routes = [
   {
     title: "Stock Summary",
@@ -36,5 +38,21 @@ export const routes = [
     title: "Return Approvals",
     route: "/return-approvals",
     page: <ReturnApprovals />,
+  },
+  // FDO
+  {
+    title: "Distributions",
+    route: "/fdo/distributions",
+    page: <Pages.FDODistributions />,
+  },
+  {
+    title: "Run History",
+    route: "/fdo/history",
+    page: <Pages.FDORunHistory />,
+  },
+  {
+    title: "Stock Requests",
+    route: "/fdo/stock-requests",
+    page: <Pages.FDOStockRequests />,
   },
 ];

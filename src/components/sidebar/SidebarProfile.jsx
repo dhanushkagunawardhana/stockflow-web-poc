@@ -13,7 +13,7 @@ function SidebarProfile({ profile }) {
             {profile.role}
           </p>
           <p className="mt-0.5 truncate text-[10px] text-muted-foreground">
-            {profile.warehouse}
+            {profile.detail}
           </p>
         </div>
       </div>

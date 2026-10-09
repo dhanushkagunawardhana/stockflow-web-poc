@@ -1,15 +1,13 @@
-import { sidebarNavigation, sidebarProfile } from "@/data/nav_sidebar";
-
 import SidebarHeader from "./SidebarHeader";
 import SidebarNav from "./SidebarNav";
 import SidebarProfile from "./SidebarProfile";
 
-function Sidebar() {
+function Sidebar({ header, nav, profile }) {
   return (
     <aside className="sticky top-0 h-screen w-60 shrink-0 flex-col border-r border-border bg-background lg:flex">
-      <SidebarHeader />
-      <SidebarNav items={sidebarNavigation} />
-      <SidebarProfile profile={sidebarProfile} />
+      <SidebarHeader header={header} />
+      <SidebarNav items={nav} />
+      <SidebarProfile profile={profile} />
     </aside>
   );
 }

@@ -4,6 +4,8 @@ import StockRequests from "./stock-requests";
 import DistributionRuns from "./distribution-runs";
 import ReturnApprovals from "./return-approvals";
 
+export * from "./fdo"
+
 export {
   Login,
   StockSummary,

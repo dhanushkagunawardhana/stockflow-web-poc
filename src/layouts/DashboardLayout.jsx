@@ -2,10 +2,20 @@ import React from "react";
 
 import { Sidebar, TopNav } from "@/components/compositions";
 
+import {
+  sidebarHeaderSM,
+  sidebarNavSM,
+  sidebarProfileSM,
+} from "@/data/sidebar/sidebar_nav_sm";
+
 function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-row bg-muted/30">
-      <Sidebar />
+      <Sidebar
+        header={sidebarHeaderSM}
+        nav={sidebarNavSM}
+        profile={sidebarProfileSM}
+      />
 
       <div className="min-w-0 flex-1">
         <TopNav />
