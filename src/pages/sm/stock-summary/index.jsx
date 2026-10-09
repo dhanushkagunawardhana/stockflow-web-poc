@@ -1,4 +1,4 @@
-import DashboardLayout from "@/layouts/DashboardLayout";
+import SMLayout from "@/layouts/SMLayout";
 
 import GreetingBanner from "./com/GreetingBanner";
 import MonthlyStockMovement from "./com/MonthlyStockMovement";
@@ -8,7 +8,7 @@ import StockSummaryFilters from "./com/StockSummaryFilters";
 
 function StockSummary() {
   return (
-    <DashboardLayout>
+    <SMLayout>
       <div className="mx-auto w-full max-w-6xl space-y-5">
         <StockSummaryFilters />
         <GreetingBanner />
@@ -16,7 +16,7 @@ function StockSummary() {
         <MonthlyStockMovement />
         <ProductStock />
       </div>
-    </DashboardLayout>
+    </SMLayout>
   );
 }
 

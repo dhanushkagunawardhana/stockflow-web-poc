@@ -8,7 +8,7 @@ import {
   sidebarProfileSM,
 } from "@/data/sidebar/sidebar_nav_sm";
 
-function DashboardLayout({ children }) {
+function SMLayout({ children }) {
   return (
     <div className="flex min-h-screen flex-row bg-muted/30">
       <Sidebar
@@ -26,4 +26,4 @@ function DashboardLayout({ children }) {
   );
 }
 
-export default DashboardLayout;
+export default SMLayout;

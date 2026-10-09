@@ -1,10 +1,10 @@
-import DashboardLayout from "@/layouts/DashboardLayout";
+import SMLayout from "@/layouts/SMLayout";
 
 import ReturnApprovalsTable from "./com/ReturnApprovalsTable";
 
 function ReturnApprovals() {
   return (
-    <DashboardLayout>
+    <SMLayout>
       <div className="mx-auto w-full max-w-6xl space-y-5">
         <div>
           <h1 className="text-lg font-semibold">Return Approvals</h1>
@@ -15,7 +15,7 @@ function ReturnApprovals() {
 
         <ReturnApprovalsTable />
       </div>
-    </DashboardLayout>
+    </SMLayout>
   );
 }
 

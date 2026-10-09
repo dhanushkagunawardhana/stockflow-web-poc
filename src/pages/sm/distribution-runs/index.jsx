@@ -1,4 +1,4 @@
-import DashboardLayout from "@/layouts/DashboardLayout";
+import SMLayout from "@/layouts/SMLayout";
 import { distributionRuns } from "@/data/mock/distribution-runs";
 
 import DistributionRunsTable from "./com/DistributionRunsTable";
@@ -8,7 +8,7 @@ function DistributionRuns() {
   const activeRunCount = distributionRuns.length - closedRunCount;
 
   return (
-    <DashboardLayout>
+    <SMLayout>
       <div className="mx-auto w-full max-w-6xl space-y-5">
         <div>
           <h1 className="text-lg font-semibold">Distribution Runs</h1>
@@ -19,7 +19,7 @@ function DistributionRuns() {
 
         <DistributionRunsTable />
       </div>
-    </DashboardLayout>
+    </SMLayout>
   );
 }
 
