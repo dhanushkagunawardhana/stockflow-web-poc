@@ -14,7 +14,7 @@ import {
 import StatusBadge from "./StatusBadge";
 import StockRequestDetails from "./StockRequestDetails";
 
-function StockRequestsTable({ requests, expandedRequestId, onToggleRequest }) {
+function StockRequestsTable({ requests, expandedRequestId, onToggleRequest, onConfirmCollection }) {
   function handleRowKeyDown(event, requestId) {
     if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
@@ -90,7 +90,10 @@ function StockRequestsTable({ requests, expandedRequestId, onToggleRequest }) {
                 {isExpanded ? (
                   <TableRow id={detailsId} className="hover:bg-white">
                     <TableCell colSpan={8} className="p-0 whitespace-normal">
-                      <StockRequestDetails request={request} />
+                      <StockRequestDetails
+                        request={request}
+                        onConfirmCollection={onConfirmCollection}
+                      />
                     </TableCell>
                   </TableRow>
                 ) : null}

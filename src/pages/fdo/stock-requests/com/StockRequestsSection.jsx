@@ -12,21 +12,32 @@ import StockRequestsTable from "./StockRequestsTable";
 const initialFilters = { query: "", warehouse: "all", status: "all" };
 
 function StockRequestsSection() {
+  const [requests, setRequests] = useState(fdoStockRequests);
   const [filters, setFilters] = useState(initialFilters);
   const [expandedRequestId, setExpandedRequestId] = useState(null);
-  const activeRequest = fdoStockRequests.find(
-    (request) => request.runStatus === "awaiting-collection",
+  const activeRequest = requests.find(
+    (request) => ["awaiting-collection", "in-progress"].includes(request.runStatus),
   );
 
   const visibleRequests = useMemo(() => {
     const query = filters.query.trim().toLowerCase();
 
-    return fdoStockRequests.filter((request) =>
+    return requests.filter((request) =>
       (!query || request.id.toLowerCase().includes(query)) &&
       (filters.warehouse === "all" || request.warehouse === filters.warehouse) &&
       (filters.status === "all" || request.status === filters.status),
     );
-  }, [filters]);
+  }, [filters, requests]);
+
+  function confirmCollection(requestId) {
+    setRequests((current) =>
+      current.map((request) =>
+        request.id === requestId && request.runStatus === "awaiting-collection"
+          ? { ...request, runStatus: "in-progress" }
+          : request,
+      ),
+    );
+  }
 
   function changeFilter(name, value) {
     setFilters((current) => ({ ...current, [name]: value }));
@@ -69,6 +80,7 @@ function StockRequestsSection() {
           requests={visibleRequests}
           expandedRequestId={expandedRequestId}
           onToggleRequest={toggleRequest}
+          onConfirmCollection={confirmCollection}
         />
       </Card>
     </section>

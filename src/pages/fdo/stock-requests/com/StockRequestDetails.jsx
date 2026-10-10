@@ -21,7 +21,7 @@ function DetailField({ label, children }) {
   );
 }
 
-function StockRequestDetails({ request }) {
+function StockRequestDetails({ request, onConfirmCollection }) {
   const isRejected = request.status === "rejected";
   const isAwaitingCollection = request.runStatus === "awaiting-collection";
 
@@ -99,7 +99,10 @@ function StockRequestDetails({ request }) {
             Your stock request has been approved. Visit{" "}
             <strong>{request.warehouse}</strong> to collect the stock and confirm pickup.
           </p>
-          <ConfirmCollectionDialog request={request} />
+          <ConfirmCollectionDialog
+            request={request}
+            onConfirmCollection={onConfirmCollection}
+          />
         </div>
       ) : null}
     </div>

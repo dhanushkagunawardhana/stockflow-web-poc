@@ -8,6 +8,10 @@ const statusConfig = {
     label: "Awaiting Collection",
     className: "border-amber-300 bg-amber-50 text-amber-700",
   },
+  "in-progress": {
+    label: "In Progress",
+    className: "border-amber-300 bg-amber-50 text-amber-700",
+  },
   closed: { label: "Closed", className: "border-slate-200 bg-slate-50 text-slate-600" },
 };
 

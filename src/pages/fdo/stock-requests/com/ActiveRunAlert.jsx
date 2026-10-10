@@ -5,6 +5,8 @@ import StatusBadge from "./StatusBadge";
 function ActiveRunAlert({ request }) {
   if (!request) return null;
 
+  const isInProgress = request.runStatus === "in-progress";
+
   return (
     <div className="flex gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-4 text-amber-900">
       <TriangleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-amber-600" />
@@ -14,8 +16,10 @@ function ActiveRunAlert({ request }) {
           <StatusBadge status={request.runStatus} />
         </div>
         <p className="text-xs text-amber-800">
-          You have an approved run awaiting collection. Collect your stock before
-          requesting more. <span className="font-mono font-semibold">{request.distributionRun}</span>
+          {isInProgress
+            ? "A distribution run is in progress. Complete or finish this run before requesting new stock."
+            : "You have an approved run awaiting collection. Collect your stock before requesting more."}{" "}
+          <span className="font-mono font-semibold">{request.distributionRun}</span>
         </p>
       </div>
     </div>

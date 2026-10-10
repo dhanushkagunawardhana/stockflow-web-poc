@@ -12,7 +12,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-function ConfirmCollectionDialog({ request }) {
+function ConfirmCollectionDialog({ request, onConfirmCollection }) {
   return (
     <Dialog>
       <DialogTrigger
@@ -74,6 +74,7 @@ function ConfirmCollectionDialog({ request }) {
             Cancel
           </DialogClose>
           <DialogClose
+            onClick={() => onConfirmCollection(request.id)}
             render={
               <Button
                 type="button"
