@@ -1,10 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { Card } from "@/components/ui/card";
-import {
-  fdoAssignedWarehouse,
-  fdoStockRequests,
-} from "@/data/mock/fdo-stock-requests";
+import { fdoStockRequests } from "@/data/mock/fdo-stock-requests";
 
 import ActiveRunAlert from "./ActiveRunAlert";
 import RequestStockDialog from "./RequestStockDialog";
@@ -16,9 +13,9 @@ const initialFilters = { query: "", warehouse: "all", status: "all" };
 function StockRequestsSection() {
   const [requests, setRequests] = useState(fdoStockRequests);
   const [filters, setFilters] = useState(initialFilters);
-  const [expandedRequestId, setExpandedRequestId] = useState(null);
+  const [expandedRequestKey, setExpandedRequestKey] = useState(null);
   const activeRequest = requests.find(
-    (request) => ["awaiting-collection", "in-progress"].includes(request.runStatus),
+    (request) => ["awaiting-collection", "in-progress", "return-submitted"].includes(request.runStatus),
   );
 
   const visibleRequests = useMemo(() => {
@@ -39,9 +36,10 @@ function StockRequestsSection() {
           : request,
       ),
     );
+    setExpandedRequestKey(`${requestId}-in-progress`);
   }
 
-  function submitRequest({ note, products }) {
+  function submitRequest({ warehouse, requestedAt, note, products }) {
     if (activeRequest) return;
 
     const nextNumber = Math.max(
@@ -54,8 +52,8 @@ function StockRequestsSection() {
         day: "numeric",
         month: "short",
         year: "numeric",
-      }).format(new Date()),
-      warehouse: fdoAssignedWarehouse,
+      }).format(requestedAt),
+      warehouse,
       status: "pending",
       runStatus: null,
       note,
@@ -65,17 +63,17 @@ function StockRequestsSection() {
 
     setRequests((current) => [newRequest, ...current]);
     setFilters(initialFilters);
-    setExpandedRequestId(newRequest.id);
+    setExpandedRequestKey(`${newRequest.id}-none`);
   }
 
   function changeFilter(name, value) {
     setFilters((current) => ({ ...current, [name]: value }));
-    setExpandedRequestId(null);
+    setExpandedRequestKey(null);
   }
 
-  function toggleRequest(requestId) {
-    setExpandedRequestId((currentId) =>
-      currentId === requestId ? null : requestId,
+  function toggleRequest(requestKey) {
+    setExpandedRequestKey((currentKey) =>
+      currentKey === requestKey ? null : requestKey,
     );
   }
 
@@ -102,7 +100,7 @@ function StockRequestsSection() {
         <StockRequestFilters filters={filters} onFilterChange={changeFilter} />
         <StockRequestsTable
           requests={visibleRequests}
-          expandedRequestId={expandedRequestId}
+          expandedRequestKey={expandedRequestKey}
           onToggleRequest={toggleRequest}
           onConfirmCollection={confirmCollection}
         />

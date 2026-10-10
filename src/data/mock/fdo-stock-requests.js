@@ -5,8 +5,6 @@ export const fdoStockSummaryMetrics = [
   { label: "Variance", value: "0", detail: "units unaccounted" },
 ];
 
-export const fdoAssignedWarehouse = "Colombo Central Warehouse";
-
 export const fdoRequestProducts = [
   { name: "Premium Rice 5kg", sku: "RIC-5K-001", available: 1200 },
   { name: "Cooking Oil 1L", sku: "OIL-1L-002", available: 860 },
@@ -31,6 +29,22 @@ export const fdoRequestStatusOptions = [
 ];
 
 export const fdoStockRequests = [
+  {
+    id: "REQ-1058",
+    requestedDate: "6 Aug 2026",
+    warehouse: "Colombo Central Warehouse",
+    status: "approved",
+    runStatus: "return-submitted",
+    decisionDate: "6 Aug 2026",
+    decidedBy: "Amila Perera",
+    distributionRun: "RUN-1010",
+    note: "Stock for mid-week Colombo North top-up.",
+    totalUnits: 90,
+    products: [
+      { name: "Milk Powder 400g", sku: "MLK-400-003", requested: 50, available: 540 },
+      { name: "Black Tea 200g", sku: "TEA-200-004", requested: 40, available: 420 },
+    ],
+  },
   {
     id: "REQ-1058",
     requestedDate: "6 Aug 2026",

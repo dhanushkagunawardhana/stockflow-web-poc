@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, TriangleAlert } from "lucide-react";
+import { Plus, Trash2, TriangleAlert } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,57 +14,83 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  fdoAssignedWarehouse,
   fdoRequestProducts,
+  fdoRequestWarehouseOptions,
 } from "@/data/mock/fdo-stock-requests";
 
-function parseQuantity(value) {
-  if (!/^[1-9]\d*$/.test(value)) return null;
-
-  const quantity = Number(value);
-  return Number.isSafeInteger(quantity) ? quantity : null;
-}
+const emptyRows = () => [{ id: 0, sku: "", quantity: "" }];
+const warehouses = fdoRequestWarehouseOptions.filter((option) => option.value !== "all");
 
 function RequestStockDialog({ activeRequest, onSubmitRequest }) {
+  function parseQuantity(value) {
+    if (!/^[1-9]\d*$/.test(value)) return null;
+    const quantity = Number(value);
+    return Number.isSafeInteger(quantity) ? quantity : null;
+  }
+
   const [open, setOpen] = useState(false);
-  const [quantities, setQuantities] = useState({});
+  const [warehouse, setWarehouse] = useState("");
+  const [requestDate, setRequestDate] = useState(() => new Date());
+  const [rows, setRows] = useState(emptyRows);
+  const [nextRowId, setNextRowId] = useState(1);
   const [note, setNote] = useState("");
 
-  const hasInvalidQuantity = fdoRequestProducts.some((product) => {
-    const value = quantities[product.sku] ?? "";
-    return value !== "" && parseQuantity(value) === null;
+  const selectedSkus = new Set(rows.map((row) => row.sku).filter(Boolean));
+  const selectedProducts = rows.flatMap((row) => {
+    const product = fdoRequestProducts.find((item) => item.sku === row.sku);
+    const requested = parseQuantity(row.quantity);
+    return product && requested ? [{ ...product, requested }] : [];
   });
-  const selectedProducts = fdoRequestProducts.flatMap((product) => {
-    const requested = parseQuantity(quantities[product.sku] ?? "");
-    return requested ? [{ ...product, requested }] : [];
-  });
-  const totalUnits = selectedProducts.reduce(
-    (total, product) => total + product.requested,
-    0,
+  const hasInvalidRow = rows.some(
+    (row) => row.sku && parseQuantity(row.quantity) === null,
   );
   const canSubmit =
-    !activeRequest &&
-    !hasInvalidQuantity &&
-    selectedProducts.length > 0 &&
-    note.trim().length > 0;
+    !activeRequest && warehouse && !hasInvalidRow && selectedProducts.length > 0;
 
   function resetForm() {
-    setQuantities({});
+    setWarehouse("");
+    setRows(emptyRows());
+    setNextRowId(1);
     setNote("");
   }
 
   function handleOpenChange(nextOpen) {
     setOpen(nextOpen);
-    if (!nextOpen) resetForm();
+    if (nextOpen) setRequestDate(new Date());
+    else resetForm();
+  }
+
+  function updateRow(id, changes) {
+    setRows((current) =>
+      current.map((row) => (row.id === id ? { ...row, ...changes } : row)),
+    );
+  }
+
+  function removeRow(id) {
+    setRows((current) =>
+      current.length === 1 ? emptyRows() : current.filter((row) => row.id !== id),
+    );
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     if (!canSubmit) return;
 
-    onSubmitRequest({ note: note.trim(), products: selectedProducts });
+    onSubmitRequest({
+      warehouse,
+      requestedAt: requestDate,
+      note: note.trim(),
+      products: selectedProducts,
+    });
     handleOpenChange(false);
   }
 
@@ -72,137 +98,205 @@ function RequestStockDialog({ activeRequest, onSubmitRequest }) {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button
-            type="button"
-            className="bg-[#f25522] text-white hover:bg-[#dd4617]"
-          />
+          <Button type="button" className="bg-[#f25522] text-white hover:bg-[#dd4617]" />
         }
       >
         <Plus aria-hidden="true" />
         Request Stock
       </DialogTrigger>
 
-      <DialogContent className="max-h-[90dvh] overflow-y-auto bg-white sm:max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="max-h-[90dvh] gap-0 overflow-hidden bg-white p-0 sm:max-w-2xl">
+        <DialogHeader className="px-5 py-5 pr-12">
           <DialogTitle>Request Stock</DialogTitle>
-          <DialogDescription>
-            Select products and quantities for your next distribution run. The stock
-            manager will review your request.
+          <DialogDescription className="sr-only">
+            Choose a warehouse, add products and quantities, and submit a stock request.
           </DialogDescription>
         </DialogHeader>
 
-        <form className="grid gap-4" onSubmit={handleSubmit}>
-          {activeRequest ? (
-            <div className="flex gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-xs text-amber-900">
-              <TriangleAlert aria-hidden="true" className="size-4 shrink-0" />
-              <p>
-                Submission is blocked while {activeRequest.distributionRun} is{" "}
-                {activeRequest.runStatus === "in-progress"
-                  ? "in progress"
-                  : "awaiting collection"}
-                . You can review the form now and submit after this run is finished.
+        <form className="flex min-h-0 flex-col" onSubmit={handleSubmit}>
+          <div className="grid min-h-0 gap-4 overflow-y-auto px-5 pb-5">
+            {activeRequest ? (
+              <div className="flex gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-xs text-amber-900">
+                <TriangleAlert aria-hidden="true" className="size-4 shrink-0" />
+                <p>
+                  Submission is blocked while {activeRequest.distributionRun} is{" "}
+                  {activeRequest.runStatus === "return-submitted"
+                    ? "pending warehouse verification"
+                    : activeRequest.runStatus === "in-progress"
+                      ? "in progress"
+                      : "awaiting collection"}
+                  .
+                </p>
+              </div>
+            ) : null}
+
+            <div className="grid gap-1.5">
+              <Label htmlFor="request-warehouse">
+                Warehouse <span className="text-red-600">*</span>
+              </Label>
+              <Select
+                value={warehouse || null}
+                onValueChange={(value) => {
+                  setWarehouse(value);
+                  setRows(emptyRows());
+                  setNextRowId(1);
+                }}
+                itemToStringLabel={(value) =>
+                  warehouses.find((option) => option.value === value)?.label ?? ""
+                }
+              >
+                <SelectTrigger id="request-warehouse" className="w-full bg-white sm:max-w-xs">
+                  <SelectValue placeholder="Select warehouse..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {warehouses.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-1.5">
+              <p className="text-sm font-medium">Request Date</p>
+              <div className="rounded-lg bg-muted/60 px-3 py-2 text-sm text-muted-foreground">
+                {new Intl.DateTimeFormat("en-GB", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                }).format(requestDate)}
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <p className="text-sm font-medium">
+                Products <span className="text-red-600">*</span>
               </p>
-            </div>
-          ) : null}
-
-          <div className="grid gap-1.5">
-            <p className="text-sm font-medium">Warehouse</p>
-            <div className="rounded-lg border border-input bg-muted/40 px-3 py-2 text-sm">
-              {fdoAssignedWarehouse}
-            </div>
-          </div>
-
-          <fieldset className="rounded-lg border border-border px-3">
-            <legend className="px-1 text-sm font-medium">Products</legend>
-            <p className="px-1 pb-1 text-xs text-muted-foreground">
-              Enter a quantity for each product you need. Leave the rest blank.
-            </p>
-            {fdoRequestProducts.map((product) => {
-              const value = quantities[product.sku] ?? "";
-              const requested = parseQuantity(value);
-              const isInvalid = value !== "" && requested === null;
-              const exceedsAvailability = requested > product.available;
-              const quantityId = `request-quantity-${product.sku}`;
-              const messageId = `request-quantity-message-${product.sku}`;
-
-              return (
-                <div
-                  key={product.sku}
-                  className="grid grid-cols-[minmax(0,1fr)_7rem] items-center gap-3 border-b border-border py-3 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_7rem_7rem]"
-                >
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium">{product.name}</p>
-                    <p className="font-mono text-[11px] text-muted-foreground">
-                      {product.sku}
-                    </p>
-                    <p className="text-xs text-muted-foreground sm:hidden">
-                      {product.available.toLocaleString("en-US")} available
-                    </p>
-                  </div>
-                  <p className="hidden text-right text-xs text-muted-foreground sm:block">
-                    {product.available.toLocaleString("en-US")} available
-                  </p>
-                  <div>
-                    <Label htmlFor={quantityId} className="sr-only">
-                      Quantity for {product.name}
-                    </Label>
-                    <Input
-                      id={quantityId}
-                      type="number"
-                      min="1"
-                      step="1"
-                      value={value}
-                      onChange={(event) =>
-                        setQuantities((current) => ({
-                          ...current,
-                          [product.sku]: event.target.value,
-                        }))
-                      }
-                      placeholder="Qty"
-                      aria-invalid={isInvalid || undefined}
-                      aria-describedby={
-                        isInvalid || exceedsAvailability ? messageId : undefined
-                      }
-                      className="bg-white text-right"
-                    />
-                  </div>
-                  {isInvalid || exceedsAvailability ? (
-                    <p
-                      id={messageId}
-                      className={`col-span-2 text-xs sm:col-span-3 ${
-                        isInvalid ? "text-red-600" : "text-amber-700"
-                      }`}
-                    >
-                      {isInvalid
-                        ? "Enter a positive whole number or leave this blank."
-                        : "This exceeds warehouse availability and will need stock manager review."}
-                    </p>
-                  ) : null}
+              <div className="overflow-hidden rounded-lg border border-border">
+                <div className="hidden grid-cols-[minmax(0,1fr)_7rem_5rem_6rem_2rem] items-center gap-2 border-b bg-muted/40 px-3 py-2 text-xs text-muted-foreground sm:grid">
+                  <span>Product</span>
+                  <span>SKU</span>
+                  <span className="text-right">Available</span>
+                  <span className="text-right">Requested</span>
+                  <span />
                 </div>
-              );
-            })}
-          </fieldset>
+                {rows.map((row, index) => {
+                  const product = fdoRequestProducts.find((item) => item.sku === row.sku);
+                  const quantity = parseQuantity(row.quantity);
+                  const isInvalid = row.quantity !== "" && quantity === null;
+                  const exceedsAvailability = quantity > (product?.available ?? 0);
 
-          <div className="grid gap-1.5">
-            <Label htmlFor="fdo-request-note">Request Note</Label>
-            <Textarea
-              id="fdo-request-note"
-              value={note}
-              onChange={(event) => setNote(event.target.value)}
-              placeholder="Explain what this stock is needed for..."
-              rows={3}
-              required
-            />
+                  return (
+                    <div
+                      key={row.id}
+                      className="grid grid-cols-[minmax(0,1fr)_6rem_2rem] items-center gap-2 border-b border-border px-3 py-3 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_7rem_5rem_6rem_2rem]"
+                    >
+                      <div className="col-span-3 min-w-0 sm:col-span-1">
+                        <Select
+                          value={row.sku || null}
+                          onValueChange={(sku) => updateRow(row.id, { sku, quantity: "" })}
+                          disabled={!warehouse}
+                          itemToStringLabel={(value) =>
+                            fdoRequestProducts.find((item) => item.sku === value)?.name ?? ""
+                          }
+                        >
+                          <SelectTrigger
+                            aria-label={`Product ${index + 1}`}
+                            className="w-full min-w-0 bg-white"
+                          >
+                            <SelectValue
+                              placeholder={warehouse ? "Select product..." : "Select warehouse first"}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {fdoRequestProducts
+                              .filter((item) => item.sku === row.sku || !selectedSkus.has(item.sku))
+                              .map((item) => (
+                                <SelectItem key={item.sku} value={item.sku}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="break-all font-mono text-xs text-muted-foreground">
+                          {product?.sku ?? "—"}
+                        </p>
+                        {product ? (
+                          <p className="text-xs text-muted-foreground sm:hidden">
+                            {product.available.toLocaleString("en-US")} available
+                          </p>
+                        ) : null}
+                      </div>
+                      <span className="hidden text-right text-xs tabular-nums text-muted-foreground sm:block">
+                        {product ? product.available.toLocaleString("en-US") : "—"}
+                      </span>
+                      <Input
+                        type="number"
+                        min="1"
+                        step="1"
+                        value={row.quantity}
+                        onChange={(event) => updateRow(row.id, { quantity: event.target.value })}
+                        disabled={!product}
+                        aria-label={`Requested quantity for product ${index + 1}`}
+                        aria-invalid={isInvalid || undefined}
+                        className="w-full bg-white text-right"
+                        placeholder="0"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`Remove product ${index + 1}`}
+                        onClick={() => removeRow(row.id)}
+                      >
+                        <Trash2 aria-hidden="true" />
+                      </Button>
+                      {isInvalid || exceedsAvailability ? (
+                        <p className={`col-span-3 text-xs sm:col-span-5 ${isInvalid ? "text-red-600" : "text-amber-700"}`}>
+                          {isInvalid
+                            ? "Enter a positive whole number."
+                            : "This exceeds warehouse availability and will need stock manager review."}
+                        </p>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setRows((current) => [...current, { id: nextRowId, sku: "", quantity: "" }]);
+                  setNextRowId((current) => current + 1);
+                }}
+                disabled={!warehouse || rows.length >= fdoRequestProducts.length}
+                className="justify-self-start"
+              >
+                <Plus aria-hidden="true" />
+                Add Product
+              </Button>
+            </div>
+
+            <div className="grid gap-1.5">
+              <Label htmlFor="fdo-request-note">Request Note</Label>
+              <Textarea
+                id="fdo-request-note"
+                value={note}
+                onChange={(event) => setNote(event.target.value)}
+                placeholder="Add any information relevant to this stock request."
+                rows={3}
+              />
+            </div>
           </div>
 
-          <div className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2 text-sm font-semibold">
-            <span>Total Units</span>
-            <span className="tabular-nums">
-              {totalUnits.toLocaleString("en-US")}
-            </span>
-          </div>
-
-          <DialogFooter className="sticky -bottom-4 z-10 bg-white">
+          <DialogFooter className="mx-0 mb-0 shrink-0 rounded-b-xl bg-muted/30">
             <DialogClose render={<Button type="button" variant="outline" />}>
               Cancel
             </DialogClose>
@@ -211,7 +305,7 @@ function RequestStockDialog({ activeRequest, onSubmitRequest }) {
               disabled={!canSubmit}
               className="bg-[#f25522] text-white hover:bg-[#dd4617]"
             >
-              Submit Request
+              Submit Stock Request
             </Button>
           </DialogFooter>
         </form>

@@ -14,12 +14,12 @@ import {
 import StatusBadge from "./StatusBadge";
 import StockRequestDetails from "./StockRequestDetails";
 
-function StockRequestsTable({ requests, expandedRequestId, onToggleRequest, onConfirmCollection }) {
-  function handleRowKeyDown(event, requestId) {
+function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onConfirmCollection }) {
+  function handleRowKeyDown(event, requestKey) {
     if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      onToggleRequest(requestId);
+      onToggleRequest(requestKey);
     }
   }
 
@@ -46,18 +46,19 @@ function StockRequestsTable({ requests, expandedRequestId, onToggleRequest, onCo
           </TableRow>
         ) : (
           requests.map((request) => {
-            const isExpanded = expandedRequestId === request.id;
-            const detailsId = `fdo-request-details-${request.id}`;
+            const requestKey = `${request.id}-${request.runStatus ?? "none"}`;
+            const isExpanded = expandedRequestKey === requestKey;
+            const detailsId = `fdo-request-details-${requestKey}`;
 
             return (
-              <Fragment key={request.id}>
+              <Fragment key={requestKey}>
                 <TableRow
                   tabIndex={0}
                   aria-expanded={isExpanded}
                   aria-controls={detailsId}
                   className="cursor-pointer bg-white focus-visible:bg-muted/50 focus-visible:outline-none"
-                  onClick={() => onToggleRequest(request.id)}
-                  onKeyDown={(event) => handleRowKeyDown(event, request.id)}
+                  onClick={() => onToggleRequest(requestKey)}
+                  onKeyDown={(event) => handleRowKeyDown(event, requestKey)}
                 >
                   <TableCell className="px-4 font-mono text-[11px] font-semibold text-[#e94713]">
                     {request.id}
@@ -75,12 +76,12 @@ function StockRequestsTable({ requests, expandedRequestId, onToggleRequest, onCo
                       type="button"
                       variant="ghost"
                       size="icon-sm"
-                      aria-label={`${isExpanded ? "Collapse" : "Expand"} ${request.id}`}
+                      aria-label={`${isExpanded ? "Collapse" : "Expand"} ${request.id}, ${request.runStatus ?? request.status}`}
                       aria-expanded={isExpanded}
                       aria-controls={detailsId}
                       onClick={(event) => {
                         event.stopPropagation();
-                        onToggleRequest(request.id);
+                        onToggleRequest(requestKey);
                       }}
                     >
                       {isExpanded ? <ChevronDown /> : <ChevronRight />}

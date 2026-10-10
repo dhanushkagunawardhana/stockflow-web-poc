@@ -12,6 +12,10 @@ const statusConfig = {
     label: "In Progress",
     className: "border-amber-300 bg-amber-50 text-amber-700",
   },
+  "return-submitted": {
+    label: "Return Submitted",
+    className: "border-violet-200 bg-violet-50 text-violet-700",
+  },
   closed: { label: "Closed", className: "border-slate-200 bg-slate-50 text-slate-600" },
 };
 
