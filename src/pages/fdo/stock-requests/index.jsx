@@ -1,11 +1,17 @@
-import React from 'react'
+import FDOLayout from "@/layouts/FDOLayout";
 
-import FDOLayout from '@/layouts/FDOLayout'
+import StockRequestsSection from "./com/StockRequestsSection";
+import StockSummaryCards from "./com/StockSummaryCards";
 
 function FDOStockRequests() {
   return (
-    <FDOLayout>FDOStockRequests</FDOLayout>
-  )
+    <FDOLayout>
+      <div className="mx-auto w-full max-w-6xl space-y-6">
+        <StockSummaryCards />
+        <StockRequestsSection />
+      </div>
+    </FDOLayout>
+  );
 }
 
-export default FDOStockRequests
+export default FDOStockRequests;

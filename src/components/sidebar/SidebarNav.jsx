@@ -11,7 +11,7 @@ function SidebarNavItem({ item }) {
         to={to}
         end
         aria-current={isActive ? "page" : undefined}
-        className={`flex h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-medium transition-colors ${
+        className={`flex h-11 w-auto items-center gap-3 whitespace-nowrap rounded-lg px-3 text-left text-sm font-medium transition-colors lg:w-full ${
           isActive
             ? "bg-[#fdf1ed] text-[#a63d1d]"
             : "text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -31,8 +31,8 @@ function SidebarNavItem({ item }) {
 
 function SidebarNav({ items }) {
   return (
-    <nav aria-label="Primary navigation" className="px-3 py-4">
-      <ul className="space-y-1">
+    <nav aria-label="Primary navigation" className="overflow-x-auto px-3 py-2 lg:overflow-visible lg:py-4">
+      <ul className="flex w-max gap-1 lg:block lg:w-auto lg:space-y-1">
         {items.map((item) => (
           <SidebarNavItem key={item.label} item={item} />
         ))}

@@ -2,7 +2,7 @@ import { UserRound } from "lucide-react";
 
 function SidebarProfile({ profile }) {
   return (
-    <div className="mt-auto border-t border-border px-4 py-4">
+    <div className="mt-auto border-t border-border px-4 py-2 lg:py-4">
       <div className="flex items-center gap-3">
         <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#fdf1ed] text-[#a63d1d]">
           <UserRound aria-hidden="true" className="size-4" strokeWidth={1.8} />

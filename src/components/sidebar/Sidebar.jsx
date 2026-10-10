@@ -4,7 +4,7 @@ import SidebarProfile from "./SidebarProfile";
 
 function Sidebar({ header, nav, profile }) {
   return (
-    <aside className="sticky top-0 h-screen w-60 shrink-0 flex-col border-r border-border bg-background lg:flex">
+    <aside className="flex w-full flex-col border-b border-border bg-background lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-b-0 lg:border-r">
       <SidebarHeader header={header} />
       <SidebarNav items={nav} />
       <SidebarProfile profile={profile} />

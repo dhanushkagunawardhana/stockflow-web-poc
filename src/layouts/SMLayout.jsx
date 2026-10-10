@@ -10,7 +10,7 @@ import {
 
 function SMLayout({ children }) {
   return (
-    <div className="flex min-h-screen flex-row bg-muted/30">
+    <div className="flex min-h-screen flex-col bg-muted/30 lg:flex-row">
       <Sidebar
         header={sidebarHeaderSM}
         nav={sidebarNavSM}
