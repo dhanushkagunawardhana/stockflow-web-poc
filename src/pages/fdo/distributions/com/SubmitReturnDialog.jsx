@@ -23,9 +23,14 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 
-import { parseWholeNumber } from "./distribution-utils";
-
 function SubmitReturnDialog({ run, stockRows, onClose, onSubmit }) {
+  function parseWholeNumber(value) {
+    if (!/^(0|[1-9]\d*)$/.test(value)) return null;
+
+    const number = Number(value);
+    return Number.isSafeInteger(number) ? number : null;
+  }
+
   const [actuals, setActuals] = useState(() =>
     Object.fromEntries(stockRows.map((product) => [product.sku, String(product.remaining)])),
   );
@@ -35,7 +40,7 @@ function SubmitReturnDialog({ run, stockRows, onClose, onSubmit }) {
   const delivered = stockRows.reduce((total, product) => total + product.delivered, 0);
   const expected = collected - delivered;
   const values = stockRows.map((product) => {
-    const actual = parseWholeNumber(actuals[product.sku] ?? "", { allowZero: true });
+    const actual = parseWholeNumber(actuals[product.sku] ?? "");
     const invalid = actual === null || actual > product.collected;
     return { ...product, actual, invalid, variance: invalid ? null : actual - product.remaining };
   });

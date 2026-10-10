@@ -22,11 +22,16 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 
-import { parseWholeNumber } from "./distribution-utils";
-
 const firstRow = () => [{ id: 0, sku: "", quantity: "" }];
 
 function RecordDeliveryDialog({ open, onOpenChange, run, outlets, stockRows, onRecord }) {
+  function parseWholeNumber(value) {
+    if (!/^[1-9]\d*$/.test(value)) return null;
+
+    const number = Number(value);
+    return Number.isSafeInteger(number) ? number : null;
+  }
+
   const [outletId, setOutletId] = useState("");
   const [rows, setRows] = useState(firstRow);
   const [nextRowId, setNextRowId] = useState(1);

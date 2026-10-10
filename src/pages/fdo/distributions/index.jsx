@@ -17,9 +17,32 @@ import RecordDeliveryDialog from "./com/RecordDeliveryDialog";
 import RemainingStockTable from "./com/RemainingStockTable";
 import ReturnSubmittedNotice from "./com/ReturnSubmittedNotice";
 import SubmitReturnDialog from "./com/SubmitReturnDialog";
-import { formatDateTime, getStockRows } from "./com/distribution-utils";
 
 function FDODistributions() {
+  function formatDateTime(date) {
+    return new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(date);
+  }
+
+  function getStockRows(products, recordedDeliveries) {
+    return products.map((product) => {
+      const delivered = recordedDeliveries.reduce(
+        (total, delivery) =>
+          total +
+          (delivery.products.find((item) => item.sku === product.sku)?.quantity ?? 0),
+        0,
+      );
+
+      return { ...product, delivered, remaining: product.collected - delivered };
+    });
+  }
+
   const [deliveries, setDeliveries] = useState(fdoDistributionDeliveries);
   const [status, setStatus] = useState(fdoDistributionRun.status);
   const [returnSubmission, setReturnSubmission] = useState(null);
