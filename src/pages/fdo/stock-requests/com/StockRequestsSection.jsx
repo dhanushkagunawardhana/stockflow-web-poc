@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
-import { Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { fdoStockRequests } from "@/data/mock/fdo-stock-requests";
+import {
+  fdoAssignedWarehouse,
+  fdoStockRequests,
+} from "@/data/mock/fdo-stock-requests";
 
 import ActiveRunAlert from "./ActiveRunAlert";
+import RequestStockDialog from "./RequestStockDialog";
 import StockRequestFilters from "./StockRequestFilters";
 import StockRequestsTable from "./StockRequestsTable";
 
@@ -39,6 +41,33 @@ function StockRequestsSection() {
     );
   }
 
+  function submitRequest({ note, products }) {
+    if (activeRequest) return;
+
+    const nextNumber = Math.max(
+      0,
+      ...requests.map((request) => Number(request.id.replace("REQ-", "")) || 0),
+    ) + 1;
+    const newRequest = {
+      id: `REQ-${nextNumber}`,
+      requestedDate: new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }).format(new Date()),
+      warehouse: fdoAssignedWarehouse,
+      status: "pending",
+      runStatus: null,
+      note,
+      totalUnits: products.reduce((total, product) => total + product.requested, 0),
+      products,
+    };
+
+    setRequests((current) => [newRequest, ...current]);
+    setFilters(initialFilters);
+    setExpandedRequestId(newRequest.id);
+  }
+
   function changeFilter(name, value) {
     setFilters((current) => ({ ...current, [name]: value }));
     setExpandedRequestId(null);
@@ -61,15 +90,10 @@ function StockRequestsSection() {
             Request stock from a warehouse and track approval status.
           </p>
         </div>
-        <Button
-          type="button"
-          disabled
-          title="Resolve your active distribution run before requesting new stock."
-          className="bg-[#f25522] text-white"
-        >
-          <Plus aria-hidden="true" />
-          Request Stock
-        </Button>
+        <RequestStockDialog
+          activeRequest={activeRequest}
+          onSubmitRequest={submitRequest}
+        />
       </div>
 
       <ActiveRunAlert request={activeRequest} />

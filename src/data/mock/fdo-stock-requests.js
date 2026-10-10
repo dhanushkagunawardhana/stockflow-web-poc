@@ -5,6 +5,17 @@ export const fdoStockSummaryMetrics = [
   { label: "Variance", value: "0", detail: "units unaccounted" },
 ];
 
+export const fdoAssignedWarehouse = "Colombo Central Warehouse";
+
+export const fdoRequestProducts = [
+  { name: "Premium Rice 5kg", sku: "RIC-5K-001", available: 1200 },
+  { name: "Cooking Oil 1L", sku: "OIL-1L-002", available: 860 },
+  { name: "Milk Powder 400g", sku: "MLK-400-003", available: 540 },
+  { name: "Black Tea 200g", sku: "TEA-200-004", available: 420 },
+  { name: "Laundry Soap Bar", sku: "SOP-BAR-005", available: 980 },
+  { name: "Bottled Water 1.5L", sku: "WTR-15L-006", available: 1500 },
+];
+
 export const fdoRequestWarehouseOptions = [
   { label: "All Warehouses", value: "all" },
   { label: "Colombo Central Warehouse", value: "Colombo Central Warehouse" },

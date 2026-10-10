@@ -22,6 +22,7 @@ function DetailField({ label, children }) {
 }
 
 function StockRequestDetails({ request, onConfirmCollection }) {
+  const isPending = request.status === "pending";
   const isRejected = request.status === "rejected";
   const isAwaitingCollection = request.runStatus === "awaiting-collection";
 
@@ -34,9 +35,13 @@ function StockRequestDetails({ request, onConfirmCollection }) {
         <DetailField label="Warehouse">{request.warehouse}</DetailField>
         <DetailField label="Request Date">{request.requestedDate}</DetailField>
         <DetailField label="Status"><StatusBadge status={request.status} /></DetailField>
-        <DetailField label="Decision Date">{request.decisionDate}</DetailField>
-        <DetailField label="Decided By">{request.decidedBy}</DetailField>
-        {!isRejected ? (
+        {!isPending ? (
+          <>
+            <DetailField label="Decision Date">{request.decisionDate}</DetailField>
+            <DetailField label="Decided By">{request.decidedBy}</DetailField>
+          </>
+        ) : null}
+        {!isPending && !isRejected ? (
           <>
             <DetailField label="Distribution Run">
               <span className="font-mono">{request.distributionRun}</span>
