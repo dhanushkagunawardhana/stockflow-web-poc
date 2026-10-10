@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 
+
 function SubmitReturnDialog({ run, stockRows, onClose, onSubmit }) {
   function parseWholeNumber(value) {
     if (!/^(0|[1-9]\d*)$/.test(value)) return null;

@@ -24,6 +24,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const firstRow = () => [{ id: 0, sku: "", quantity: "" }];
 
+
 function RecordDeliveryDialog({ open, onOpenChange, run, outlets, stockRows, onRecord }) {
   function parseWholeNumber(value) {
     if (!/^[1-9]\d*$/.test(value)) return null;

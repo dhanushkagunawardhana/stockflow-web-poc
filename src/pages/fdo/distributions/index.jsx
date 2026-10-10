@@ -10,13 +10,13 @@ import {
 } from "@/data/mock/fdo-distributions";
 import FDOLayout from "@/layouts/FDOLayout";
 
-import DeliveryHistoryTable from "./com/DeliveryHistoryTable";
-import DistributionRunCard from "./com/DistributionRunCard";
-import FinishRunDialog from "./com/FinishRunDialog";
-import RecordDeliveryDialog from "./com/RecordDeliveryDialog";
-import RemainingStockTable from "./com/RemainingStockTable";
-import ReturnSubmittedNotice from "./com/ReturnSubmittedNotice";
-import SubmitReturnDialog from "./com/SubmitReturnDialog";
+import DeliveryHistoryTable from "./com/delivery-history/DeliveryHistoryTable";
+import FinishRunDialog from "./com/dialogs/FinishRunDialog";
+import RecordDeliveryDialog from "./com/dialogs/RecordDeliveryDialog";
+import SubmitReturnDialog from "./com/dialogs/SubmitReturnDialog";
+import DistributionRunCard from "./com/run-summary/DistributionRunCard";
+import ReturnSubmittedNotice from "./com/run-summary/ReturnSubmittedNotice";
+import RemainingStockTable from "./com/stock/RemainingStockTable";
 
 function FDODistributions() {
   function formatDateTime(date) {

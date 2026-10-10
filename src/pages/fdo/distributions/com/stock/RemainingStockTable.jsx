@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+
 function RemainingStockTable({ products }) {
   return (
     <section aria-labelledby="remaining-stock-heading" className="space-y-2">
