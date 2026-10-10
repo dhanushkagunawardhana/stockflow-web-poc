@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { fdoStockRequests } from "@/data/mock/fdo-stock-requests";
 
-import ActiveRunAlert from "./ActiveRunAlert";
 import RequestStockDialog from "./RequestStockDialog";
 import StockRequestFilters from "./StockRequestFilters";
 import StockRequestsTable from "./StockRequestsTable";
@@ -14,9 +13,6 @@ function StockRequestsSection() {
   const [requests, setRequests] = useState(fdoStockRequests);
   const [filters, setFilters] = useState(initialFilters);
   const [expandedRequestKey, setExpandedRequestKey] = useState(null);
-  const activeRequest = requests.find(
-    (request) => ["awaiting-collection", "in-progress", "return-submitted"].includes(request.runStatus),
-  );
 
   const visibleRequests = useMemo(() => {
     const query = filters.query.trim().toLowerCase();
@@ -39,9 +35,31 @@ function StockRequestsSection() {
     setExpandedRequestKey(`${requestId}-in-progress`);
   }
 
-  function submitRequest({ warehouse, requestedAt, note, products }) {
-    if (activeRequest) return;
+  function acceptAllocation(requestId) {
+    const nextRunNumber = Math.max(
+      0,
+      ...requests.map((request) => Number(request.distributionRun?.replace("RUN-", "")) || 0),
+    ) + 1;
 
+    setRequests((current) => {
+      const accepted = current.find((request) => request.id === requestId && request.status === "allocation-ready");
+      if (!accepted) return current;
+
+      return [
+        {
+          ...accepted,
+          status: "approved",
+          runStatus: "awaiting-collection",
+          decisionDate: accepted.allocationDate,
+          distributionRun: `RUN-${nextRunNumber}`,
+        },
+        ...current.filter((request) => request !== accepted),
+      ];
+    });
+    setExpandedRequestKey(`${requestId}-awaiting-collection`);
+  }
+
+  function submitRequest({ warehouse, requestedAt, note, products }) {
     const nextNumber = Math.max(
       0,
       ...requests.map((request) => Number(request.id.replace("REQ-", "")) || 0),
@@ -88,13 +106,8 @@ function StockRequestsSection() {
             Request stock from a warehouse and track approval status.
           </p>
         </div>
-        <RequestStockDialog
-          activeRequest={activeRequest}
-          onSubmitRequest={submitRequest}
-        />
+        <RequestStockDialog onSubmitRequest={submitRequest} />
       </div>
-
-      <ActiveRunAlert request={activeRequest} />
 
       <Card className="gap-0 rounded-xl bg-white py-0 shadow-none">
         <StockRequestFilters filters={filters} onFilterChange={changeFilter} />
@@ -103,6 +116,7 @@ function StockRequestsSection() {
           expandedRequestKey={expandedRequestKey}
           onToggleRequest={toggleRequest}
           onConfirmCollection={confirmCollection}
+          onAcceptAllocation={acceptAllocation}
         />
       </Card>
     </section>

@@ -10,7 +10,25 @@ import RequestHistoryTable from "./request-history/RequestHistoryTable";
 
 function StockRequestsTable() {
   const [view, setView] = useState("pending");
+  const [requests, setRequests] = useState(pendingStockRequests);
   const isPending = view === "pending";
+
+  function sendAllocation(requestId, products, note) {
+    setRequests((current) => current.map((request) =>
+      request.id === requestId && request.status === "pending"
+        ? {
+            ...request,
+            status: "awaiting-fdo-acceptance",
+            allocationDate: new Intl.DateTimeFormat("en-GB", {
+              day: "numeric", month: "short", year: "numeric",
+            }).format(new Date()),
+            allocationNote: note,
+            allocatedTotalUnits: products.reduce((total, product) => total + product.allocated, 0),
+            products,
+          }
+        : request,
+    ));
+  }
 
   return (
     <Card className="gap-0 rounded-2xl py-0 shadow-none">
@@ -25,9 +43,9 @@ function StockRequestsTable() {
             className={isPending ? "bg-background shadow-sm" : "text-muted-foreground"}
             onClick={() => setView("pending")}
           >
-            Pending Requests
+            Active Requests
             <Badge className="bg-[#f25522] px-1.5 text-white">
-              {pendingStockRequests.length}
+              {requests.length}
             </Badge>
           </Button>
           <Button
@@ -44,7 +62,9 @@ function StockRequestsTable() {
         </div>
       </CardHeader>
 
-      {isPending ? <PendingRequestsTable /> : <RequestHistoryTable />}
+      {isPending ? (
+        <PendingRequestsTable requests={requests} onSendAllocation={sendAllocation} />
+      ) : <RequestHistoryTable />}
     </Card>
   );
 }

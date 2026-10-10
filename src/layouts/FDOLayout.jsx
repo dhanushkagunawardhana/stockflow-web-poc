@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Sidebar, TopNav } from "@/components/compositions";
+import Sidebar from "@/components/sidebar";
+import TopNav from "@/components/top-nav/TopNav";
 
 import {
   sidebarHeaderFDO,

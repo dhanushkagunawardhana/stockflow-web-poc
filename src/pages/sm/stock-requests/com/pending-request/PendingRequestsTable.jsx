@@ -11,12 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { pendingStockRequests } from "@/data/mock/stock-requests";
 
 import RequestStatusBadge from "../shared/RequestStatusBadge";
 import PendingRequestDetails from "./PendingRequestDetails";
 
-function PendingRequestsTable() {
+function PendingRequestsTable({ requests, onSendAllocation }) {
   const [expandedRequestId, setExpandedRequestId] = useState(null);
 
   function toggleRequest(requestId) {
@@ -26,6 +25,7 @@ function PendingRequestsTable() {
   }
 
   function handleRowKeyDown(event, requestId) {
+    if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       toggleRequest(requestId);
@@ -51,7 +51,7 @@ function PendingRequestsTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pendingStockRequests.map((request) => {
+          {requests.map((request) => {
             const isExpanded = expandedRequestId === request.id;
             const detailsId = `pending-request-details-${request.id}`;
 
@@ -99,7 +99,7 @@ function PendingRequestsTable() {
                 {isExpanded ? (
                   <TableRow id={detailsId} className="hover:bg-transparent">
                     <TableCell colSpan={9} className="p-0 whitespace-normal">
-                      <PendingRequestDetails request={request} />
+                      <PendingRequestDetails request={request} onSendAllocation={onSendAllocation} />
                     </TableCell>
                   </TableRow>
                 ) : null}

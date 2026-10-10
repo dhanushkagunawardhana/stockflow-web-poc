@@ -14,7 +14,7 @@ import {
 import StatusBadge from "./StatusBadge";
 import StockRequestDetails from "./StockRequestDetails";
 
-function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onConfirmCollection }) {
+function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onConfirmCollection, onAcceptAllocation }) {
   function handleRowKeyDown(event, requestKey) {
     if (event.target !== event.currentTarget) return;
     if (event.key === "Enter" || event.key === " ") {
@@ -24,14 +24,15 @@ function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onC
   }
 
   return (
-    <Table className="min-w-215 text-xs">
+    <Table className="min-w-235 text-xs">
       <TableHeader className="bg-muted/40 text-muted-foreground">
         <TableRow className="hover:bg-transparent">
           <TableHead className="px-4">Request ID</TableHead>
           <TableHead>Date</TableHead>
           <TableHead>Warehouse</TableHead>
           <TableHead className="text-right">Products</TableHead>
-          <TableHead className="text-right">Total Units</TableHead>
+          <TableHead className="text-right">Requested Units</TableHead>
+          <TableHead className="text-right">Allocated Units</TableHead>
           <TableHead>Request Status</TableHead>
           <TableHead>Run Status</TableHead>
           <TableHead className="w-12"><span className="sr-only">Expand request</span></TableHead>
@@ -40,7 +41,7 @@ function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onC
       <TableBody>
         {requests.length === 0 ? (
           <TableRow className="hover:bg-white">
-            <TableCell colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
+            <TableCell colSpan={9} className="px-4 py-8 text-center text-muted-foreground">
               No stock requests match these filters.
             </TableCell>
           </TableRow>
@@ -69,6 +70,9 @@ function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onC
                   <TableCell className="text-right font-semibold tabular-nums">
                     {request.totalUnits.toLocaleString("en-US")}
                   </TableCell>
+                  <TableCell className="text-right font-semibold tabular-nums">
+                    {request.allocatedTotalUnits?.toLocaleString("en-US") ?? "—"}
+                  </TableCell>
                   <TableCell><StatusBadge status={request.status} /></TableCell>
                   <TableCell><StatusBadge status={request.runStatus} /></TableCell>
                   <TableCell>
@@ -90,10 +94,11 @@ function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onC
                 </TableRow>
                 {isExpanded ? (
                   <TableRow id={detailsId} className="hover:bg-white">
-                    <TableCell colSpan={8} className="p-0 whitespace-normal">
+                    <TableCell colSpan={9} className="p-0 whitespace-normal">
                       <StockRequestDetails
                         request={request}
                         onConfirmCollection={onConfirmCollection}
+                        onAcceptAllocation={onAcceptAllocation}
                       />
                     </TableCell>
                   </TableRow>

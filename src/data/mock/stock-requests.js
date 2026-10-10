@@ -1,5 +1,21 @@
 export const pendingStockRequests = [
   {
+    id: "REQ-1061",
+    fdo: "Kasun Perera",
+    warehouse: "Colombo Central Warehouse",
+    route: "Colombo North",
+    requestedDate: "6 Aug 2026",
+    plannedDistribution: "9 Aug 2026",
+    note: "Stock running low at Colombo North outlets, please prioritise.",
+    status: "pending",
+    totalUnits: 240,
+    products: [
+      { name: "Premium Rice 5kg", sku: "RIC-5K-001", requested: 80, available: 1200 },
+      { name: "Black Tea 200g", sku: "TEA-200-004", requested: 60, available: 420 },
+      { name: "Bottled Water 1.5L", sku: "WTR-15L-006", requested: 100, available: 1500 },
+    ],
+  },
+  {
     id: "REQ-1055",
     fdo: "Nimal Silva",
     warehouse: "Colombo Central Warehouse",

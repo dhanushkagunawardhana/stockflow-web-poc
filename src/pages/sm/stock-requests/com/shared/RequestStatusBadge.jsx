@@ -2,8 +2,12 @@ import { Badge } from "@/components/ui/badge";
 
 const statusConfig = {
   pending: {
-    label: "Pending",
+    label: "Pending Manager Review",
     className: "border-amber-300 bg-amber-50 text-amber-700",
+  },
+  "awaiting-fdo-acceptance": {
+    label: "Awaiting FDO Acceptance",
+    className: "border-blue-200 bg-blue-50 text-blue-700",
   },
   approved: {
     label: "Approved",

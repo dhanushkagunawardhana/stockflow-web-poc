@@ -54,14 +54,14 @@ function ConfirmCollectionDialog({ request, onConfirmCollection }) {
             {request.products.map((product) => (
               <div key={product.sku} className="flex justify-between gap-3 py-0.5">
                 <span>{product.name}</span>
-                <span className="shrink-0 font-semibold">{product.requested} units</span>
+                <span className="shrink-0 font-semibold">{product.allocated ?? product.requested} units</span>
               </div>
             ))}
           </div>
 
           <div className="flex justify-between border-t pt-2 font-semibold">
             <span>Total</span>
-            <span>{request.totalUnits} units</span>
+            <span>{request.allocatedTotalUnits ?? request.totalUnits} units</span>
           </div>
         </div>
 

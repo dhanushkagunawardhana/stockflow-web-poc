@@ -24,6 +24,7 @@ export const fdoRequestWarehouseOptions = [
 export const fdoRequestStatusOptions = [
   { label: "All Statuses", value: "all" },
   { label: "Pending", value: "pending" },
+  { label: "Allocation Ready", value: "allocation-ready" },
   { label: "Approved", value: "approved" },
   { label: "Rejected", value: "rejected" },
 ];
@@ -43,6 +44,24 @@ export const fdoStockRequests = [
     products: [
       { name: "Milk Powder 400g", sku: "MLK-400-003", requested: 50, available: 540 },
       { name: "Black Tea 200g", sku: "TEA-200-004", requested: 40, available: 420 },
+    ],
+  },
+  {
+    id: "REQ-1061",
+    requestedDate: "6 Aug 2026",
+    warehouse: "Colombo Central Warehouse",
+    status: "allocation-ready",
+    runStatus: null,
+    allocationDate: "6 Aug 2026",
+    decidedBy: "Amila Perera",
+    note: "Stock running low at Colombo North outlets, please prioritise.",
+    allocationNote: "Black Tea reduced by 10 units to protect warehouse reserve stock.",
+    totalUnits: 240,
+    allocatedTotalUnits: 230,
+    products: [
+      { name: "Premium Rice 5kg", sku: "RIC-5K-001", requested: 80, allocated: 80, available: 1200 },
+      { name: "Black Tea 200g", sku: "TEA-200-004", requested: 60, allocated: 50, available: 420 },
+      { name: "Bottled Water 1.5L", sku: "WTR-15L-006", requested: 100, allocated: 100, available: 1500 },
     ],
   },
   {

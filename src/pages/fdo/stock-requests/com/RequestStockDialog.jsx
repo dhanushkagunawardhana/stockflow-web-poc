@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Trash2, TriangleAlert } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,7 +30,7 @@ import {
 const emptyRows = () => [{ id: 0, sku: "", quantity: "" }];
 const warehouses = fdoRequestWarehouseOptions.filter((option) => option.value !== "all");
 
-function RequestStockDialog({ activeRequest, onSubmitRequest }) {
+function RequestStockDialog({ onSubmitRequest }) {
   function parseQuantity(value) {
     if (!/^[1-9]\d*$/.test(value)) return null;
     const quantity = Number(value);
@@ -53,8 +53,7 @@ function RequestStockDialog({ activeRequest, onSubmitRequest }) {
   const hasInvalidRow = rows.some(
     (row) => row.sku && parseQuantity(row.quantity) === null,
   );
-  const canSubmit =
-    !activeRequest && warehouse && !hasInvalidRow && selectedProducts.length > 0;
+  const canSubmit = warehouse && !hasInvalidRow && selectedProducts.length > 0;
 
   function resetForm() {
     setWarehouse("");
@@ -115,21 +114,6 @@ function RequestStockDialog({ activeRequest, onSubmitRequest }) {
 
         <form className="flex min-h-0 flex-col" onSubmit={handleSubmit}>
           <div className="grid min-h-0 gap-4 overflow-y-auto px-5 pb-5">
-            {activeRequest ? (
-              <div className="flex gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-3 text-xs text-amber-900">
-                <TriangleAlert aria-hidden="true" className="size-4 shrink-0" />
-                <p>
-                  Submission is blocked while {activeRequest.distributionRun} is{" "}
-                  {activeRequest.runStatus === "return-submitted"
-                    ? "pending warehouse verification"
-                    : activeRequest.runStatus === "in-progress"
-                      ? "in progress"
-                      : "awaiting collection"}
-                  .
-                </p>
-              </div>
-            ) : null}
-
             <div className="grid gap-1.5">
               <Label htmlFor="request-warehouse">
                 Warehouse <span className="text-red-600">*</span>
