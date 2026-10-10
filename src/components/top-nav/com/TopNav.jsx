@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { routes } from "@/data/routes";
 import { Button } from "@/components/ui/button";
+import { routes } from "@/data/routes";
 
 import ViewSwitchButton from "./ViewSwitchButton";
 

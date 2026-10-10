@@ -1,7 +1,7 @@
 import React from "react";
 
 import Sidebar from "@/components/sidebar";
-import TopNav from "@/components/top-nav/TopNav";
+import TopNav from "@/components/top-nav";
 
 import {
   sidebarHeaderSM,
