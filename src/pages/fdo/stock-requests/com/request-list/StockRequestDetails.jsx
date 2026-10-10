@@ -10,9 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import AcceptAllocationDialog from "./AcceptAllocationDialog";
-import ConfirmCollectionDialog from "./ConfirmCollectionDialog";
-import StatusBadge from "./StatusBadge";
+import AcceptAllocationDialog from "../dialogs/AcceptAllocationDialog";
+import ConfirmCollectionDialog from "../dialogs/ConfirmCollectionDialog";
+import StatusBadge from "../shared/StatusBadge";
 
 function DetailField({ label, children }) {
   return (

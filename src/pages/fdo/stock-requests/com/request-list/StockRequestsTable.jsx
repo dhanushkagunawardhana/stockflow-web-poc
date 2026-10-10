@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import StatusBadge from "./StatusBadge";
+import StatusBadge from "../shared/StatusBadge";
 import StockRequestDetails from "./StockRequestDetails";
 
 function StockRequestsTable({ requests, expandedRequestKey, onToggleRequest, onConfirmCollection, onAcceptAllocation }) {

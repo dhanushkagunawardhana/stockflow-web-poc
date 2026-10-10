@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fdoStockSummaryMetrics } from "@/data/mock/fdo-stock-requests";
 
+
 function StockSummaryCards() {
   return (
     <section aria-label="Stock summary" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">

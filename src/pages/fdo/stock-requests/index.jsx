@@ -1,7 +1,7 @@
 import FDOLayout from "@/layouts/FDOLayout";
 
-import StockRequestsSection from "./com/StockRequestsSection";
-import StockSummaryCards from "./com/StockSummaryCards";
+import StockRequestsSection from "./com/request-list/StockRequestsSection";
+import StockSummaryCards from "./com/summary/StockSummaryCards";
 
 function FDOStockRequests() {
   return (

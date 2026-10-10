@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { fdoStockRequests } from "@/data/mock/fdo-stock-requests";
 
-import RequestStockDialog from "./RequestStockDialog";
+import RequestStockDialog from "../dialogs/RequestStockDialog";
 import StockRequestFilters from "./StockRequestFilters";
 import StockRequestsTable from "./StockRequestsTable";
 

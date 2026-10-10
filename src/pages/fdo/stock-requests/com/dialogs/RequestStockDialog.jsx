@@ -30,6 +30,7 @@ import {
 const emptyRows = () => [{ id: 0, sku: "", quantity: "" }];
 const warehouses = fdoRequestWarehouseOptions.filter((option) => option.value !== "all");
 
+
 function RequestStockDialog({ onSubmitRequest }) {
   function parseQuantity(value) {
     if (!/^[1-9]\d*$/.test(value)) return null;

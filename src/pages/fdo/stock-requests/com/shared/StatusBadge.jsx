@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
+
 const statusConfig = {
   pending: { label: "Pending", className: "border-amber-200 bg-amber-50 text-amber-700" },
   "allocation-ready": { label: "Allocation Ready", className: "border-blue-200 bg-blue-50 text-blue-700" },
