@@ -82,6 +82,7 @@ function SignUp() {
                     value={form.firstName}
                     onChange={handleChange}
                     autoComplete="given-name"
+                    placeholder="John"
                     required
                   />
                 </div>
@@ -94,6 +95,7 @@ function SignUp() {
                     value={form.lastName}
                     onChange={handleChange}
                     autoComplete="family-name"
+                    placeholder="Doe"
                     required
                   />
                 </div>
@@ -107,7 +109,7 @@ function SignUp() {
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  placeholder="you@example.com"
+                  placeholder="john.doe@stockflow.com"
                   autoComplete="email"
                   required
                 />
