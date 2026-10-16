@@ -1,13 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { UserButton } from "@clerk/react";
+import { useLocation } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
 import { routes } from "@/data/routes";
-
-import ViewSwitchButton from "./ViewSwitchButton";
 
 function TopNav() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const pageTitle = routes.find(({ route }) => route === pathname)?.title;
 
   return (
@@ -15,8 +12,7 @@ function TopNav() {
       <h1 className="min-w-0 truncate font-semibold text-foreground">{pageTitle}</h1>
 
       <div className="ml-auto flex shrink-0 items-center gap-2">
-        <ViewSwitchButton />
-        <Button onClick={() => navigate("/login")}>Login</Button>
+        <UserButton />
       </div>
     </header>
   );

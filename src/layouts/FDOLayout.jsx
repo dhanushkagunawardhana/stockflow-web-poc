@@ -6,7 +6,6 @@ import TopNav from "@/components/top-nav";
 import {
   sidebarHeaderFDO,
   sidebarNavFDO,
-  sidebarProfileFDO,
 } from "@/data/sidebar/sidebar_nav_fdo";
 
 function FDOLayout({ children }) {
@@ -15,7 +14,6 @@ function FDOLayout({ children }) {
       <Sidebar
         header={sidebarHeaderFDO}
         nav={sidebarNavFDO}
-        profile={sidebarProfileFDO}
       />
 
       <div className="min-w-0 flex-1">

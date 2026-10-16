@@ -1,6 +1,17 @@
+import { useUser } from "@clerk/react";
 import { UserRound } from "lucide-react";
 
-function SidebarProfile({ profile }) {
+const roleLabel = {
+  "stock-manager": "Stock Manager",
+  fdo: "Field Distribution Officer",
+};
+
+function SidebarProfile() {
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress || "";
+  const name = user?.fullName || email || "StockFlow user";
+  const role = roleLabel[user?.publicMetadata?.role] || "Access pending";
+
   return (
     <div className="mt-auto border-t border-border px-4 py-2 lg:py-4">
       <div className="flex items-center gap-3">
@@ -8,12 +19,12 @@ function SidebarProfile({ profile }) {
           <UserRound aria-hidden="true" className="size-4" strokeWidth={1.8} />
         </div>
         <div className="min-w-0 leading-tight">
-          <p className="truncate text-xs font-medium text-foreground">{profile.name}</p>
+          <p className="truncate text-xs font-medium text-foreground">{name}</p>
           <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-            {profile.role}
+            {role}
           </p>
           <p className="mt-0.5 truncate text-[10px] text-muted-foreground">
-            {profile.detail}
+            {email}
           </p>
         </div>
       </div>
