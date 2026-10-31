@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/table";
 import {
   productStatusOptions,
-  productStockItems,
 } from "@/data/mock/stock-summary";
 
 const statusStyles = {
@@ -34,14 +33,14 @@ const statusLabels = Object.fromEntries(
   productStatusOptions.map(({ label, value }) => [value, label]),
 );
 
-function ProductStock() {
+function ProductStock({ products }) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
-    return productStockItems.filter((product) => {
+    return products.filter((product) => {
       const matchesQuery =
         !normalizedQuery ||
         product.name.toLowerCase().includes(normalizedQuery) ||
@@ -50,7 +49,7 @@ function ProductStock() {
 
       return matchesQuery && matchesStatus;
     });
-  }, [query, status]);
+  }, [products, query, status]);
 
   return (
     <section aria-labelledby="product-stock-heading">

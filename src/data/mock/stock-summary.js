@@ -124,6 +124,6 @@ export const warehouseOptions = [
 
 export const monthOptions = [
   { label: "August 2026", value: "2026-08" },
-  { label: "July 2026", value: "2026-09" },
-  { label: "June 2026", value: "2026-10" },
+  { label: "September 2026", value: "2026-09" },
+  { label: "October 2026", value: "2026-10" },
 ];

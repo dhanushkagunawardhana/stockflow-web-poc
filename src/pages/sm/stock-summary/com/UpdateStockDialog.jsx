@@ -78,9 +78,9 @@ function UpdateStockDialog() {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update Stock</DialogTitle>
-          <DialogDescription className="sr-only">
-            Record stock received for a warehouse and product.
+          <DialogTitle>Update Stock (Demo Only)</DialogTitle>
+          <DialogDescription>
+            This form is a visual demo. It does not save changes.
           </DialogDescription>
         </DialogHeader>
 
@@ -168,7 +168,7 @@ function UpdateStockDialog() {
               type="submit"
               className="bg-[#f25522] text-white hover:bg-[#dd4617]"
             >
-              Add Stock
+              Close Demo
             </Button>
           </DialogFooter>
         </form>

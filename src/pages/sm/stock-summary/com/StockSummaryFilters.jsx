@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/select";
 import { monthOptions, warehouseOptions } from "@/data/mock/stock-summary";
 
-function StockSummaryFilters() {
+function StockSummaryFilters({ warehouse, month, onWarehouseChange, onMonthChange }) {
   return (
     <div className="flex flex-wrap items-center justify-end gap-3">
-      <Select items={warehouseOptions} defaultValue="all">
+      <Select items={warehouseOptions} value={warehouse} onValueChange={onWarehouseChange}>
         <SelectTrigger className="w-full sm:min-w-60 sm:w-auto">
           <SelectValue placeholder="Select a Warehouse" />
         </SelectTrigger>
@@ -28,7 +28,7 @@ function StockSummaryFilters() {
         </SelectContent>
       </Select>
 
-      <Select items={monthOptions} defaultValue="2026-08">
+      <Select items={monthOptions} value={month} onValueChange={onMonthChange}>
         <SelectTrigger className="w-full sm:min-w-40 sm:w-auto">
           <SelectValue placeholder="Select a Month" />
         </SelectTrigger>

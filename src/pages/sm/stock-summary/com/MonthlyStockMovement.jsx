@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/chart";
 import {
   stockMovementConfig,
-  stockMovementData,
 } from "@/data/mock/stock-summary";
 
-function MonthlyStockMovement() {
+function MonthlyStockMovement({ data }) {
   return (
     <section aria-labelledby="monthly-stock-movement-heading">
       <Card className="gap-0 rounded-xl py-0 shadow-none">
@@ -38,7 +37,7 @@ function MonthlyStockMovement() {
           >
             <BarChart
               accessibilityLayer
-              data={stockMovementData}
+              data={data}
               margin={{ top: 8, right: 12, left: -12 }}
             >
               <CartesianGrid vertical={false} />
@@ -49,8 +48,7 @@ function MonthlyStockMovement() {
                 tickMargin={8}
               />
               <YAxis
-                domain={[0, 2400]}
-                ticks={[0, 600, 1200, 1800, 2400]}
+                domain={[0, "auto"]}
                 tickLine={false}
                 axisLine={false}
                 allowDecimals={false}
