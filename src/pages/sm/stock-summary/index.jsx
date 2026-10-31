@@ -16,22 +16,21 @@ function StockSummary() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const controller = new AbortController();
-    fetchStockSummary({ warehouse, month, signal: controller.signal })
+    fetchStockSummary({ warehouse, month })
       .then((data) => {
         setSummary(data);
         setError("");
       })
       .catch((requestError) => {
-        if (requestError.code !== "ERR_CANCELED") {
-          setSummary(null);
-          setError(requestError.response?.data?.error ?? "Could not load stock data. Check that MongoDB and the API server are running.");
-        }
+        setSummary(null);
+        setError(
+          requestError.response?.data?.error ??
+            "Could not load stock data. Check that MongoDB and the API server are running.",
+        );
       })
       .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
+        setLoading(false);
       });
-    return () => controller.abort();
   }, [warehouse, month]);
 
   function changeWarehouse(value) {
@@ -47,17 +46,44 @@ function StockSummary() {
   return (
     <SMLayout>
       <div className="mx-auto w-full max-w-6xl space-y-5">
-        <StockSummaryFilters warehouse={warehouse} month={month} onWarehouseChange={changeWarehouse} onMonthChange={changeMonth} />
+        <StockSummaryFilters
+          warehouse={warehouse}
+          month={month}
+          onWarehouseChange={changeWarehouse}
+          onMonthChange={changeMonth}
+        />
         <GreetingBanner />
-        {loading && <p role="status" className="py-10 text-center text-sm text-muted-foreground">Loading stock summary...</p>}
-        {error && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">{error}</p>}
+        {loading && (
+          <p
+            role="status"
+            className="py-10 text-center text-sm text-muted-foreground"
+          >
+            Loading stock summary...
+          </p>
+        )}
+        {error && (
+          <p
+            role="alert"
+            className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+          >
+            {error}
+          </p>
+        )}
         {!loading && !error && summary && (
           <>
-            <StockOverview totals={summary.totals} warehouse={warehouse} month={month} />
+            <StockOverview
+              totals={summary.totals}
+              warehouse={warehouse}
+              month={month}
+            />
             <MonthlyStockMovement data={summary.movement} />
-            {summary.products.length === 0
-              ? <p className="rounded-lg border p-6 text-center text-sm text-muted-foreground">No stock records for this selection.</p>
-              : <ProductStock products={summary.products} />}
+            {summary.products.length === 0 ? (
+              <p className="rounded-lg border p-6 text-center text-sm text-muted-foreground">
+                No stock records for this selection.
+              </p>
+            ) : (
+              <ProductStock products={summary.products} />
+            )}
           </>
         )}
       </div>
